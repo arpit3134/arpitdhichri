@@ -1,47 +1,55 @@
-export interface Topic {
-  id: string
-  name: string
-  slug: string
-  description: string
-  articleCount: number
-  icon: string
-  color: string
-}
+import { create } from 'zustand'
+import { Article, Tool, Calculator, Topic, Collection, Resource } from '@/types'
+import { initializeData } from './init'
 
-export interface Article {
-  id: string
-  title: string
-  excerpt: string
-  topicId: string
-  topicName: string
-  readTime: number
-  publishedAt: string
-  featured: boolean
-}
-
-interface Store {
-  topics: Topic[]
+interface AppState {
   articles: Article[]
+  tools: Tool[]
+  calculators: Calculator[]
+  topics: Topic[]
+  collections: Collection[]
+  resources: Resource[]
+  bookmarks: Record<string, boolean>
+  searchQuery: string
+  setSearchQuery: (query: string) => void
+  addBookmark: (id: string, type: string) => void
+  removeBookmark: (id: string, type: string) => void
+  isBookmarked: (id: string, type: string) => boolean
 }
 
-const store: Store = {
-  topics: [],
-  articles: [],
-}
+const initialData = initializeData()
 
-export const getTopics = (): Topic[] => store.topics || []
-export const getArticles = (): Article[] => store.articles || []
-
-export const getFeaturedArticles = (): Article[] =>
-  (store.articles || []).filter(a => a.featured)
-
-export const getArticlesByTopic = (topicId: string): Article[] =>
-  (store.articles || []).filter(a => a.topicId === topicId)
-
-export const setTopics = (topics: Topic[]) => {
-  store.topics = topics || []
-}
-
-export const setArticles = (articles: Article[]) => {
-  store.articles = articles || []
-}
+export const useAppStore = create<AppState>((set, get) => ({
+  articles: initialData.articles,
+  tools: initialData.tools,
+  calculators: initialData.calculators,
+  topics: initialData.topics,
+  collections: initialData.collections,
+  resources: initialData.resources,
+  bookmarks: initialData.bookmarks,
+  searchQuery: '',
+  
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  
+  addBookmark: (id, type) => {
+    const key = `${type}_${id}`
+    set((state) => ({
+      bookmarks: { ...state.bookmarks, [key]: true }
+    }))
+    localStorage.setItem(`bookmark_${key}`, 'true')
+  },
+  
+  removeBookmark: (id, type) => {
+    const key = `${type}_${id}`
+    set((state) => {
+      const { [key]: _, ...rest } = state.bookmarks
+      return { bookmarks: rest }
+    })
+    localStorage.removeItem(`bookmark_${key}`)
+  },
+  
+  isBookmarked: (id, type) => {
+    const key = `${type}_${id}`
+    return get().bookmarks[key] || false
+  }
+}))
