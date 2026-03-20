@@ -18,4 +18,15 @@ export default function Topics() {
               to={`/topics/${topic.slug}`}
               className="group p-8 rounded-xl bg-card border hover:border-primary/50 transition-all hover:shadow-lg text-center"
             >
-              <
+              <div className="text-5xl mb-4">{topic.icon}</div>
+              <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                {topic.name}
+              </h3>
+              <p className="text-sm text-muted-foreground">{topic.count} items</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
