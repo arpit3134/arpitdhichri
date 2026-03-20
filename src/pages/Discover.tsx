@@ -83,4 +83,87 @@ export default function Discover() {
               activeFilter === 'articles'
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-muted hover:bg-muted/80'
-            }
+            }`}
+          >
+            Articles
+          </button>
+          <button
+            onClick={() => setActiveFilter('tools')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeFilter === 'tools'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted hover:bg-muted/80'
+            }`}
+          >
+            Tools
+          </button>
+          <button
+            onClick={() => setActiveFilter('calculators')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeFilter === 'calculators'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted hover:bg-muted/80'
+            }`}
+          >
+            Calculators
+          </button>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-sm font-medium mb-3">Filter by topic:</h3>
+          <div className="flex flex-wrap gap-2">
+            {topics.map((topic) => (
+              <TopicChip
+                key={topic.id}
+                topic={topic}
+                selected={selectedTopics.includes(topic.slug)}
+                onClick={() => handleTopicToggle(topic.slug)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-12">
+          {showArticles && filteredArticles.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-6">Articles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {showTools && filteredTools.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-6">Tools</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {showCalculators && filteredCalculators.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-6">Calculators</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredCalculators.map((calc) => (
+                  <CalculatorCard key={calc.id} calculator={calc} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {filteredArticles.length === 0 && filteredTools.length === 0 && filteredCalculators.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No results found. Try adjusting your search or filters.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
