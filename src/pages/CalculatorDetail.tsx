@@ -54,4 +54,7 @@ export default function CalculatorDetail() {
             </div>
           </div>
         </div>
-      </div
+      </div>
+    </div>
+  )
+}
