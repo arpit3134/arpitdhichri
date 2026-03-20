@@ -64,3 +64,4 @@ export function CalculatorCard({ calculator, featured = false, className = '' }:
     </Link>
   )
 }
+
